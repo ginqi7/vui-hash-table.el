@@ -3,11 +3,11 @@
 ;; Copyright (C) 2026  Qiqi Jin
 
 ;; Author: Qiqi Jin  <ginqi7@gmail.com>
-;; Version: 1.0
+;; Version: 0.01
 ;; Description: A hash table UI component with sortable columns and row selection
 ;; Homepage: https://github.com/ginqi7/vui-hash-table
 ;; Keywords: tools
-;; Package-Requires: ((emacs "24.3"))
+;; Package-Requires: ((emacs "29.1") (vui "0.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
