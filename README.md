@@ -44,6 +44,23 @@ Each header is a cons cell `(key . props)`:
 | `:sorted`      | boolean  | Column is currently sorted            |
 | `:reversed`    | boolean  | Sort is reversed                      |
 
+## Functions
+
+### `vui-hash-table-mount` (name buffer-name actions &rest props)
+
+Mount a hash table component in a buffer and return the instance.
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `name` | symbol | Component name (from `vui-hash-table-defcomponent`) |
+| `buffer-name` | string | Buffer to mount in (created if doesn't exist) |
+| `actions` | function | Called with selected keys list on RET press |
+| `props` | plist | Props passed to the VUI component (`:headers`, `:table`) |
+
+### `vui-hash-table-clear-selected` ()
+
+Clear all row selections in the current component.
+
 ## Variables
 
 - `vui-hash-table--instance` — Current component instance

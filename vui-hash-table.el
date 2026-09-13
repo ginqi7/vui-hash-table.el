@@ -151,10 +151,10 @@ Returns list of formatted row values."
   "Toggle selection state for the checkbox at point.
 Adds/removes the key at point from `vui-hash-table--selected`."
   (interactive)
-  (let* ((data (button-at (point)))
-         (begin (button-start data))
-         (end (button-end data))
-         (key (buffer-substring-no-properties begin end))
+  (let* ((button (button-at (point)))
+         (begin (button-start button))
+         (end (button-end button))
+         (key (get-text-property begin 'value))
          (selected-p (member key vui-hash-table--selected))
          (buffer-read-only nil)
          (inhibit-read-only t))
@@ -174,10 +174,11 @@ Adds/removes the key at point from `vui-hash-table--selected`."
                   (unless (member key vui-hash-table--selected)
                     (vui-hash-table--select))
                   (when vui-hash-table--actions
-                    (funcall vui-hash-table--actions))))
+                    (funcall vui-hash-table--actions vui-hash-table--selected))))
 
     (define-key map (kbd "SPC") #'vui-hash-table--select)
     (propertize (buttonize (format "%s" key) nil)
+                'value key
                 'display (if (member key vui-hash-table--selected) "☑" "☐")
                 'keymap map)))
 
@@ -198,6 +199,20 @@ with sortable columns."
              :rows (vui-hash-table-to-rows headers table)
              :border ,border
              :sticky-header ,sticky-header)))))
+
+(defun vui-hash-table-mount (name buffer-name actions &rest props)
+  "Mount a hash table component NAME in BUFFER-NAME with ACTIONS.
+ACTIONS is a function called with the list of selected keys when RET is pressed.
+PROPS are passed to the VUI component as props.
+Returns the created VUI instance."
+  (with-current-buffer (get-buffer-create buffer-name)
+    (setq-local vui-hash-table--actions actions)
+    (setq-local vui-hash-table--instance
+                (vui-mount (apply #'vui-component name props) buffer-name))))
+
+(defun vui-hash-table-clear-selected ()
+  "Clear all selected rows in the current hash table component."
+  (setq-local vui-hash-table--selected nil))
 
 (provide 'vui-hash-table)
 ;;; vui-hash-table.el ends here
