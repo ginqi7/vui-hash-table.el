@@ -75,10 +75,9 @@ Applies each header's formatter to the corresponding hash value."
 (defun vui-hash-table-sort-by (sorted-key sort-func reversed table)
   "Sort TABLE by the hash value of SORTED-KEY using SORT-FUNC or string comparison.
 When REVERSED is non-nil, reverse the sort order."
-  (sort table
-        :key (lambda (row) (gethash sorted-key row))
-        :lessp (or sort-func (lambda (a b) (string< (format "%s" a) (format "%s" b))))
-        :reverse reversed))
+  (let* ((comparator (or sort-func (lambda (a b) (string< (format "%s" a) (format "%s" b)))))
+         (comparator (if reversed (lambda (a b) (not (funcall comparator a b))) comparator)))
+    (cl-sort table comparator :key (apply-partially #'gethash sorted-key))))
 
 (defun vui-hash-table-update-sort-header (headers header)
   "Update HEADERS to mark the sorted HEADER column.
@@ -88,13 +87,13 @@ property."
    (lambda (one)
      (if (equal one header)
          (cons (car one)
-           (plist-put
-            (plist-put (cdr one) :sorted (equal one header))
-            :reversed (if (plist-get (cdr one) :reversed) nil t)))
+               (plist-put
+                (plist-put (cdr one) :sorted t)
+                :reversed (not (plist-get (cdr one) :reversed))))
        (cons (car one)
-           (plist-put
-            (plist-put (cdr one) :sorted nil)
-            :reversed nil))))
+             (plist-put
+              (plist-put (cdr one) :sorted nil)
+              :reversed nil))))
    headers))
 
 (defun vui-hash-table-sort (button header)
