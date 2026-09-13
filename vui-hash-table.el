@@ -99,7 +99,7 @@ property."
 
 (defun vui-hash-table-sort (button header)
   "Sort the table by HEADER column when button is clicked.
-BUTTON is the clicked button. Updates instance props and repositions
+BUTTON is the clicked button.  Updates instance props and repositions
 point."
   (let* ((instance vui-hash-table--instance)
          (props (vui-instance-props instance))
@@ -185,7 +185,7 @@ Adds/removes the key at point from `vui-hash-table--selected`."
 (cl-defun vui-hash-table-defcomponent (&key name border sticky-header)
   "Define a hash table component named NAME.
 Optional BORDER and STICKY-HEADER enable table borders and sticky
-headers. Creates a VUI table component that displays hash table data
+headers.  Creates a VUI table component that displays hash table data
 with sortable columns."
   (eval `(vui-defcomponent ,name (headers table)
            :render
